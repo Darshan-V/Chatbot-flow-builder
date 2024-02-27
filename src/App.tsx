@@ -1,11 +1,18 @@
-import "./App.css";
+import * as ReactRouter from "react-router-dom";
+import Home from "./pages/playground";
 
-function App() {
+const router = ReactRouter.createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
+]);
+
+const App = () => {
   return (
     <>
-      <div className=" w-22 h-20 bg-red-500"></div>
+      <ReactRouter.RouterProvider router={router} />
     </>
   );
-}
-
+};
 export default App;
