@@ -1,4 +1,5 @@
 import React, { DragEvent } from "react";
+import { BiMessageRoundedDetail } from "react-icons/bi";
 
 const Sidebar: React.FC = () => {
   const onDragStart = (event: DragEvent<HTMLDivElement>, nodeType: string) => {
@@ -7,32 +8,16 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside>
-      <div className="description">
-        You can drag these nodes to the pane on the right.
-      </div>
+    <div className="w-full h-full bg-gray-400 p-4 flex flex-col">
       <div
-        className="dndnode input"
-        onDragStart={(event) => onDragStart(event, "input")}
+        className="border-2 border-gray-600 p-2  h-fit rounded-md "
+        onDragStart={(event) => onDragStart(event, "custom")}
         draggable
       >
-        Input Node
+        <BiMessageRoundedDetail className="mx-auto" />
+        <p className=" text-center">Message</p>
       </div>
-      <div
-        className="dndnode"
-        onDragStart={(event) => onDragStart(event, "default")}
-        draggable
-      >
-        Default Node
-      </div>
-      <div
-        className="dndnode output"
-        onDragStart={(event) => onDragStart(event, "output")}
-        draggable
-      >
-        Output Node
-      </div>
-    </aside>
+    </div>
   );
 };
 

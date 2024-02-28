@@ -8,15 +8,23 @@ import ReactFlow, {
   Connection,
   Edge,
   OnInit,
+  MiniMap,
+  MarkerType,
 } from "reactflow";
 import "reactflow/dist/style.css";
+
+import customNode from "./customNode";
+
+const nodeTypes = {
+  custom: customNode,
+};
 
 const initialNodes = [
   {
     id: "1",
-    type: "input",
-    data: { label: "input node" },
-    position: { x: 250, y: 5 },
+    type: "custom",
+    data: { name: "new message" },
+    position: { x: 0, y: 50 },
   },
 ];
 
@@ -31,7 +39,7 @@ const Map = () => {
 
   const onConnect = useCallback(
     (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
-    []
+    [setEdges]
   );
 
   const onDragOver = useCallback(
@@ -61,20 +69,17 @@ const Map = () => {
         return;
       }
 
-      // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
-      // and you don't need to subtract the reactFlowBounds.left/top anymore
-      // details: https://reactflow.dev/whats-new/2023-11-10
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const position = reactFlowInstance?.screenToFlowPosition({
+      // @ts-expect-error: Casting event coordinates to position using reactFlowInstance.
+      const position = reactFlowInstance.project({
         x: event.clientX,
         y: event.clientY,
       });
+
       const newNode = {
         id: getId(),
         type: type as string, // Cast the type to string
         position,
-        data: { label: `${type} node` },
+        data: { name: "new node", label: `${type} node` },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -85,19 +90,30 @@ const Map = () => {
   return (
     <div className="dndflow">
       <ReactFlowProvider>
-        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+        <div className=" flex-grow h-full" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onInit={setReactFlowInstance as unknown as OnInit<unknown, unknown>} // Update the type of setReactFlowInstance
             onDrop={onDrop}
             onDragOver={onDragOver}
-            fitView
+            defaultEdges={[
+              {
+                id: "e1-2",
+                source: "1",
+                target: "2",
+                type: "arrow",
+                animated: true,
+                label: "This is an edge label",
+              },
+            ]}
           >
             <Controls />
+            <MiniMap />
           </ReactFlow>
         </div>
       </ReactFlowProvider>
