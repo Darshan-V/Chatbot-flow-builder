@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Sidebar from "./Sidebar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,7 +34,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         >
           {children}
         </div>
-        {!isMobile && <div className="w-64 bg-gray-300 p-4">Right Sidebar</div>}
+        {!isMobile && (
+          <div className="w-64 bg-gray-300 p-4">
+            <Sidebar />
+          </div>
+        )}
       </div>
     </div>
   );
